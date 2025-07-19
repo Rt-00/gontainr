@@ -16,12 +16,15 @@ func main() {
 
 	// Repositories
 	userRepo := repository.NewUserRepository(cfg.DB)
+	containerRepo := repository.NewContainerRepository()
 
 	// Services
 	authService := service.NewAuthService(userRepo, cfg.JWTSecret)
+	containerService := service.NewContainerService(containerRepo)
 
 	// Handlers
 	authHandler := handler.NewAuthHandler(authService)
+	containerHandler := handler.NewContainerHandler(containerService)
 
 	// Router
 	r := gin.Default()
@@ -43,6 +46,7 @@ func main() {
 	api := r.Group("/api/v1")
 	{
 		api.POST("/auth/login", authHandler.Login)
+		api.GET("/containers", containerHandler.GetContainers)
 	}
 
 	log.Fatal(r.Run(":8080"))

@@ -9,7 +9,7 @@ type ContainerService struct {
 	containerRepo *repository.ContainerRepository
 }
 
-func NewContainerSerivce(containerRepo *repository.ContainerRepository) *ContainerService {
+func NewContainerService(containerRepo *repository.ContainerRepository) *ContainerService {
 	return &ContainerService{containerRepo: containerRepo}
 }
 
