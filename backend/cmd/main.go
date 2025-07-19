@@ -5,6 +5,7 @@ import (
 
 	"github.com/Rt-00/gontainr/backend/internal/config"
 	"github.com/Rt-00/gontainr/backend/internal/handler"
+	"github.com/Rt-00/gontainr/backend/internal/middleware"
 	"github.com/Rt-00/gontainr/backend/internal/repository"
 	"github.com/Rt-00/gontainr/backend/internal/service"
 	"github.com/gin-gonic/gin"
@@ -46,7 +47,12 @@ func main() {
 	api := r.Group("/api/v1")
 	{
 		api.POST("/auth/login", authHandler.Login)
-		api.GET("/containers", containerHandler.GetContainers)
+
+		protected := api.Group("/")
+		protected.Use(middleware.AuthMiddleware(cfg.JWTSecret))
+		{
+			api.GET("/containers", containerHandler.GetContainers)
+		}
 	}
 
 	log.Fatal(r.Run(":8080"))
