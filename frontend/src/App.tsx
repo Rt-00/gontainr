@@ -1,9 +1,9 @@
+import { useAuth } from "./hooks/useAuth";
+
 function App() {
-  return (
-    <>
-      <h1>First Setup</h1>
-    </>
-  );
+  const { isAuthenticated } = useAuth();
+
+  return <div>{isAuthenticated ? <p>Dashboard</p> : <p>LoginScreen</p>}</div>;
 }
 
 export default App;
