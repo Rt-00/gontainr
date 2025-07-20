@@ -46,3 +46,7 @@ func (containerRepo *ContainerRepository) GetAll() ([]domain.Container, error) {
 func (containerRepo *ContainerRepository) Stop(id string) error {
 	return containerRepo.client.ContainerStop(context.Background(), id, container.StopOptions{})
 }
+
+func (containerRepo *ContainerRepository) Start(id string) error {
+	return containerRepo.client.ContainerStart(context.Background(), id, container.StartOptions{})
+}

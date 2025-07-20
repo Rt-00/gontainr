@@ -53,6 +53,7 @@ func main() {
 		{
 			protected.GET("/containers", containerHandler.GetContainers)
 			protected.POST("/containers/:id/stop", containerHandler.StopContainer)
+			protected.POST("/containers/:id/start", containerHandler.StartContainer)
 		}
 	}
 

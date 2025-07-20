@@ -20,3 +20,7 @@ func (containerService *ContainerService) GetContainers() ([]domain.Container, e
 func (containerService *ContainerService) StopContainers(id string) error {
 	return containerService.containerRepo.Stop(id)
 }
+
+func (containerService *ContainerService) StartContainer(id string) error {
+	return containerService.containerRepo.Start(id)
+}
