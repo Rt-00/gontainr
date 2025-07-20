@@ -51,7 +51,8 @@ func main() {
 		protected := api.Group("/")
 		protected.Use(middleware.AuthMiddleware(cfg.JWTSecret))
 		{
-			api.GET("/containers", containerHandler.GetContainers)
+			protected.GET("/containers", containerHandler.GetContainers)
+			protected.POST("/containers/:id/stop", containerHandler.StopContainer)
 		}
 	}
 

@@ -24,3 +24,14 @@ func (containerHandler *ContainerHandler) GetContainers(c *gin.Context) {
 
 	c.JSON(http.StatusOK, containers)
 }
+
+func (containerHandler *ContainerHandler) StopContainer(c *gin.Context) {
+	id := c.Param("id")
+
+	if err := containerHandler.containerService.StopContainers(id); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Container stopped"})
+}

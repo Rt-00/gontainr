@@ -16,3 +16,7 @@ func NewContainerService(containerRepo *repository.ContainerRepository) *Contain
 func (containerService *ContainerService) GetContainers() ([]domain.Container, error) {
 	return containerService.containerRepo.GetAll()
 }
+
+func (containerService *ContainerService) StopContainers(id string) error {
+	return containerService.containerRepo.Stop(id)
+}
