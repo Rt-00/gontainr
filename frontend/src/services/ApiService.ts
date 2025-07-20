@@ -46,6 +46,20 @@ class ApiService {
 
     return response.json();
   }
+
+  async startContainer(id: string) {
+    const response = await fetch(`${this.baseURL}/containers/${id}/start`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...this.getAuthHeaders(),
+      },
+    });
+
+    if (!response.ok) throw new Error("Failed to start container");
+
+    return response.json();
+  }
 }
 
 export const api = new ApiService();

@@ -2,7 +2,7 @@ import { Activity, Eye, Play, Square } from "lucide-react";
 import { useContainers } from "../hooks/useContainers";
 
 export const ContainerList = () => {
-  const { refetch, containers, loading, error, stopContainer } =
+  const { refetch, containers, loading, error, stopContainer, startContainer } =
     useContainers();
 
   if (loading) {
@@ -67,6 +67,7 @@ export const ContainerList = () => {
 
               <div className="flex gap-2">
                 <button
+                  onClick={() => startContainer(container.id)}
                   title="Start Container"
                   className="bg-green-600 hover:bg-green-700 text-white p-1 rounded-md"
                 >

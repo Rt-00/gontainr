@@ -31,6 +31,17 @@ export const useContainers = () => {
     }
   };
 
+  const startContainer = async (id: string) => {
+    try {
+      await api.startContainer(id);
+      await fetchContainers();
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Failed to start container"
+      );
+    }
+  };
+
   useEffect(() => {
     fetchContainers();
   }, []);
@@ -40,6 +51,7 @@ export const useContainers = () => {
     loading,
     error,
     stopContainer,
+    startContainer,
     refetch: fetchContainers,
   };
 };
