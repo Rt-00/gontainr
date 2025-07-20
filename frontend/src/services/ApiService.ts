@@ -1,4 +1,5 @@
 import type { Container } from "../type/Container";
+import type { LogEntry } from "../type/LogEntry";
 
 class ApiService {
   private baseURL = "http://localhost:8080/api/v1";
@@ -57,6 +58,19 @@ class ApiService {
     });
 
     if (!response.ok) throw new Error("Failed to start container");
+
+    return response.json();
+  }
+
+  async getLogs(id: string): Promise<LogEntry[]> {
+    const response = await fetch(`${this.baseURL}/containers/${id}/logs`, {
+      headers: {
+        "Content-Type": "application/json",
+        ...this.getAuthHeaders(),
+      },
+    });
+
+    if (!response.ok) throw new Error("Failed to fetch logs");
 
     return response.json();
   }

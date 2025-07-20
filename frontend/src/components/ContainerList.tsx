@@ -1,7 +1,11 @@
 import { Activity, Eye, Play, Square } from "lucide-react";
 import { useContainers } from "../hooks/useContainers";
 
-export const ContainerList = () => {
+export const ContainerList = ({
+  onViewLogs,
+}: {
+  onViewLogs: (id: string, name: string) => void;
+}) => {
   const { refetch, containers, loading, error, stopContainer, startContainer } =
     useContainers();
 
@@ -83,6 +87,7 @@ export const ContainerList = () => {
                 </button>
 
                 <button
+                  onClick={() => onViewLogs(container.id, container.name)}
                   title="View Logs"
                   className="bg-blue-600 hover:bg-blue-700 text-white p-1 rounded-md"
                 >
