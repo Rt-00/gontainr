@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"io"
 	"time"
 
 	"github.com/Rt-00/gontainr/backend/internal/domain"
@@ -49,4 +50,34 @@ func (containerRepo *ContainerRepository) Stop(id string) error {
 
 func (containerRepo *ContainerRepository) Start(id string) error {
 	return containerRepo.client.ContainerStart(context.Background(), id, container.StartOptions{})
+}
+
+func (containerRepo *ContainerRepository) GetLogs(id string) ([]domain.LogEntry, error) {
+	logs, err := containerRepo.client.ContainerLogs(context.Background(), id, container.LogsOptions{
+		ShowStdout: true,
+		ShowStderr: true,
+		Timestamps: true,
+		Tail:       "100",
+	})
+	if err != nil {
+		return nil, err
+	}
+	defer logs.Close()
+
+	content, err := io.ReadAll(logs)
+	if err != nil {
+		return nil, err
+	}
+
+	// Parse logs and return entries
+	var entries []domain.LogEntry
+	lines := string(content)
+
+	// Simplified parsing
+	entries = append(entries, domain.LogEntry{
+		Timestamp: time.Now(),
+		Message:   lines,
+	})
+
+	return entries, nil
 }

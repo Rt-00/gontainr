@@ -46,3 +46,15 @@ func (containerHandler *ContainerHandler) StartContainer(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": "Container started"})
 }
+
+func (h *ContainerHandler) GetLogs(c *gin.Context) {
+	id := c.Param("id")
+	logs, err := h.containerService.GetLogs(id)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, logs)
+}

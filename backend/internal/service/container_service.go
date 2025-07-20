@@ -24,3 +24,7 @@ func (containerService *ContainerService) StopContainers(id string) error {
 func (containerService *ContainerService) StartContainer(id string) error {
 	return containerService.containerRepo.Start(id)
 }
+
+func (containerService *ContainerService) GetLogs(id string) ([]domain.LogEntry, error) {
+	return containerService.containerRepo.GetLogs(id)
+}
