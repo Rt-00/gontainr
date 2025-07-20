@@ -23,12 +23,8 @@ export const useLogs = (containerId: string | null) => {
   };
 
   useEffect(() => {
-    if (containerId) {
-      fetchLogs();
-      const interval = setInterval(fetchLogs, 2000); // Refresh every 2 seconds
-      return () => clearInterval(interval);
-    }
-  }, [containerId]);
+    fetchLogs();
+  }, []);
 
   return { logs, loading, error, refetch: fetchLogs };
 };

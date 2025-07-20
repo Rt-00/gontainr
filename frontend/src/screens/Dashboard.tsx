@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ContainerList } from "../components/ContainerList";
 import { Header } from "../components/Header";
+import { LogsViewer } from "../components/LogsViewer";
 
 export const Dashboard = () => {
   const [currentView, setCurrentView] = useState<"containers" | "logs">(
@@ -16,6 +17,11 @@ export const Dashboard = () => {
     setCurrentView("logs");
   };
 
+  const handleCloseLogs = () => {
+    setSelectedContainer(null);
+    setCurrentView("containers");
+  };
+
   return (
     <div className="min-h-screen bg-gray-900">
       <Header />
@@ -25,7 +31,13 @@ export const Dashboard = () => {
           <ContainerList onViewLogs={handleViewLogs} />
         )}
 
-        {currentView === "logs" && selectedContainer && <p>Logs Viewer...</p>}
+        {currentView === "logs" && selectedContainer && (
+          <LogsViewer
+            containerId={selectedContainer.id}
+            containerName={selectedContainer.name}
+            onClose={handleCloseLogs}
+          />
+        )}
       </main>
     </div>
   );
