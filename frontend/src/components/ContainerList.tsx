@@ -2,7 +2,8 @@ import { Activity, Eye, Play, Square } from "lucide-react";
 import { useContainers } from "../hooks/useContainers";
 
 export const ContainerList = () => {
-  const { refetch, containers, loading, error } = useContainers();
+  const { refetch, containers, loading, error, stopContainer } =
+    useContainers();
 
   if (loading) {
     return (
@@ -73,8 +74,9 @@ export const ContainerList = () => {
                 </button>
 
                 <button
+                  onClick={() => stopContainer(container.id)}
                   title="Stop Container"
-                  className="bg-red-600 hover:bg-red-700 text-white p-1 rounded-md"
+                  className="bg-red-600 hover:bg-red-700 text-white p-1 rounded-md cursor-pointer"
                 >
                   <Square className="h-4 w-4" />
                 </button>

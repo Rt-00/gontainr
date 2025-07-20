@@ -32,6 +32,20 @@ class ApiService {
 
     return response.json();
   }
+
+  async stopContainer(id: string) {
+    const response = await fetch(`${this.baseURL}/containers/${id}/stop`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...this.getAuthHeaders(),
+      },
+    });
+
+    if (!response.ok) throw new Error("Failed to stop container");
+
+    return response.json();
+  }
 }
 
 export const api = new ApiService();

@@ -22,6 +22,15 @@ export const useContainers = () => {
     }
   };
 
+  const stopContainer = async (id: string) => {
+    try {
+      await api.stopContainer(id);
+      await fetchContainers();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to stop container");
+    }
+  };
+
   useEffect(() => {
     fetchContainers();
   }, []);
@@ -30,6 +39,7 @@ export const useContainers = () => {
     containers,
     loading,
     error,
+    stopContainer,
     refetch: fetchContainers,
   };
 };
