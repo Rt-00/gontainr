@@ -23,14 +23,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setToken(response.token);
 
     localStorage.setItem("token", response.token);
-    localStorage.setItem("user", JSON.stringify(response.user));
   };
 
   const logout = async () => {
     setUser(null);
     setToken(null);
     localStorage.removeItem("token");
-    localStorage.removeItem("user");
   };
 
   return (
@@ -40,7 +38,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         token,
         login,
         logout,
-        isAuthenticated: !!token && !!user,
+        isAuthenticated: !!token,
       }}
     >
       {children}
