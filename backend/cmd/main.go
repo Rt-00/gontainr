@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/Rt-00/gontainr/backend/internal/config"
+	"github.com/Rt-00/gontainr/backend/internal/db/migrations"
 	"github.com/Rt-00/gontainr/backend/internal/handler"
 	"github.com/Rt-00/gontainr/backend/internal/middleware"
 	"github.com/Rt-00/gontainr/backend/internal/repository"
@@ -14,6 +15,14 @@ import (
 func main() {
 	// Load configs
 	cfg := config.Load()
+
+	// Create migrator
+	migrator := migrations.NewMigrator(cfg.DB)
+
+	// Exec migrations
+	if err := migrator.ApplyMigrations(); err != nil {
+		log.Fatalf("Migration failed: %v", err)
+	}
 
 	// Repositories
 	userRepo := repository.NewUserRepository(cfg.DB)
