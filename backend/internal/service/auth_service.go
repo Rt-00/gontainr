@@ -38,8 +38,8 @@ func (authService *AuthService) Login(req domain.LoginRequest) (*domain.LoginRes
 	}
 
 	return &domain.LoginResponse{
-		Token: token,
-		User:  *user,
+		Token:    token,
+		Username: user.Username,
 	}, nil
 }
 
@@ -52,4 +52,12 @@ func (authService *AuthService) generateToken(userID int) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 	return token.SignedString([]byte(authService.jwtSecret))
+}
+
+func (authService *AuthService) JwtSecret() string {
+	return authService.jwtSecret
+}
+
+func (authService *AuthService) GetUserByID(userID int) (*domain.User, error) {
+	return authService.userRepo.GetUserByID(userID)
 }

@@ -41,9 +41,11 @@ func main() {
 
 	// CORS
 	r.Use(func(c *gin.Context) {
-		c.Header("Access-Control-Allow-Origin", "*")
+		c.Header("Access-Control-Allow-Origin", "http://localhost:5173")
 		c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 		c.Header("Access-Control-Allow-Headers", "Content-Type, Authorization")
+		c.Header("Access-Control-Allow-Credentials", "true")
+
 		if c.Request.Method == "OPTIONS" {
 			c.AbortWithStatus(204)
 			return
@@ -55,7 +57,14 @@ func main() {
 	// Routes
 	api := r.Group("/api/v1")
 	{
-		api.POST("/auth/login", authHandler.Login)
+		authRoutes := api.Group("/auth")
+		authRoutes.POST("/login", authHandler.Login)
+
+		authRoutes.Use(middleware.AuthMiddleware(cfg.JWTSecret))
+		{
+			authRoutes.GET("/me", authHandler.Me)
+			authRoutes.POST("/logout", authHandler.Logout)
+		}
 
 		protected := api.Group("/")
 		protected.Use(middleware.AuthMiddleware(cfg.JWTSecret))
