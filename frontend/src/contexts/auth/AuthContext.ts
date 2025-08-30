@@ -3,7 +3,6 @@ import type { User } from "../../type/User";
 
 interface AuthContextType {
   user: User | null;
-  token: string | null;
   login: (username: string, password: string) => Promise<void>;
   logout: () => void;
   isAuthenticated: boolean;

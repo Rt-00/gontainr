@@ -5,40 +5,40 @@ import { AuthContext } from "./AuthContext";
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(
-    localStorage.getItem("token")
-  );
 
   useEffect(() => {
-    const savedUser = localStorage.getItem("user");
-    if (savedUser && token) {
-      setUser(JSON.parse(savedUser));
-    }
-  }, [token]);
+    const checkAuth = async () => {
+      try {
+        const response = await api.getMe();
+        setUser(response.user);
+      } catch {
+        setUser(null);
+      }
+    };
+
+    checkAuth();
+  }, []);
 
   const login = async (username: string, password: string) => {
-    const response = await api.login(username, password);
+    await api.login(username, password);
 
-    setUser(response.user);
-    setToken(response.token);
+    const me = await api.getMe();
 
-    localStorage.setItem("token", response.token);
+    setUser(me);
   };
 
   const logout = async () => {
+    await api.logout();
     setUser(null);
-    setToken(null);
-    localStorage.removeItem("token");
   };
 
   return (
     <AuthContext.Provider
       value={{
         user,
-        token,
         login,
         logout,
-        isAuthenticated: !!token,
+        isAuthenticated: !!user,
       }}
     >
       {children}
