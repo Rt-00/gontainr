@@ -10,7 +10,7 @@ dev:
 	@echo "Starting development environment"
 	docker compose -f ../docker-compose.yml up -d
 
-	sleep 1 # TODO:remove this in future and use depends_on for docker image
+	sleep 3 # TODO:remove this in future and use depends_on for docker image
 	
 	@echo "Starting server"
 	go run cmd/main.go
