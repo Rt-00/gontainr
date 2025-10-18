@@ -1,13 +1,14 @@
 package repository
 
 import (
+	"bytes"
 	"context"
-	"io"
 	"time"
 
 	"github.com/Rt-00/gontainr/backend/internal/domain"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/client"
+	"github.com/docker/docker/pkg/stdcopy"
 )
 
 type ContainerRepository struct {
@@ -53,30 +54,31 @@ func (containerRepo *ContainerRepository) Start(id string) error {
 }
 
 func (containerRepo *ContainerRepository) GetLogs(id string) ([]domain.LogEntry, error) {
-	logs, err := containerRepo.client.ContainerLogs(context.Background(), id, container.LogsOptions{
+	reader, err := containerRepo.client.ContainerLogs(context.Background(), id, container.LogsOptions{
 		ShowStdout: true,
 		ShowStderr: true,
 		Timestamps: true,
+		Follow:     false,
 		Tail:       "100",
 	})
 	if err != nil {
 		return nil, err
 	}
-	defer logs.Close()
+	defer reader.Close()
 
-	content, err := io.ReadAll(logs)
+	var buf bytes.Buffer
+	_, err = stdcopy.StdCopy(&buf, &buf, reader)
 	if err != nil {
 		return nil, err
 	}
 
-	// Parse logs and return entries
-	var entries []domain.LogEntry
-	lines := string(content)
+	content := buf.String()
 
-	// Simplified parsing
+	var entries []domain.LogEntry
+
 	entries = append(entries, domain.LogEntry{
 		Timestamp: time.Now(),
-		Message:   lines,
+		Message:   content,
 	})
 
 	return entries, nil
