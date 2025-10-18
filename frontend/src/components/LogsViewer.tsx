@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { useLogs } from "../hooks/useLogs";
 
 export const LogsViewer = ({
@@ -10,6 +11,21 @@ export const LogsViewer = ({
   onClose: () => void;
 }) => {
   const { error, refetch, loading, logs } = useLogs(containerId);
+  const scrollBarToEnd = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (scrollBarToEnd.current) {
+      scrollBarToEnd.current.scrollTop = scrollBarToEnd.current.scrollHeight;
+    }
+  }, [logs]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refetch();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [refetch]);
 
   return (
     <div className="space-y-4">
@@ -41,7 +57,10 @@ export const LogsViewer = ({
         {error && <div className="text-red-400 text-center py-4">{error}</div>}
 
         {!loading && !error && (
-          <div className="bg-black rounded p-4 h-[650px] overflow-y-auto font-mono text-sm">
+          <div
+            ref={scrollBarToEnd}
+            className="bg-black rounded p-4 h-[650px] overflow-y-auto font-mono text-sm"
+          >
             {logs.length === 0 ? (
               <div className="text-gray-400">No logs available</div>
             ) : (
